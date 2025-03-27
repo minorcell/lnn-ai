@@ -4,6 +4,6 @@ import { LocalBotService } from './local-bot.service';
 
 @Module({
   controllers: [LocalBotController],
-  providers: [LocalBotService]
+  providers: [LocalBotService],
 })
 export class LocalBotModule {}

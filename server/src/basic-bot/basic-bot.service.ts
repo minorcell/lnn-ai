@@ -1,5 +1,20 @@
 import { Injectable } from '@nestjs/common';
 
+interface OpenAIResponse {
+  id: string;
+  model: string;
+  usage: {
+    prompt_tokens: number;
+    completion_tokens: number;
+    total_tokens: number;
+  };
+  choices: Array<{
+    message: {
+      content: string;
+    };
+  }>;
+}
+
 @Injectable()
 export class BasicBotService {
   async chat(message: string) {
@@ -12,26 +27,26 @@ export class BasicBotService {
       body: JSON.stringify({
         model: 'gpt-3.5-turbo',
         messages: [
-          { role: 'system', content: '你是一个天气查询助手，你会根据用户的问题，比如问题里面的城市，去查询当天这个城市的天气情况，你会对结果进行语义话优化。' },
+          {
+            role: 'system',
+            content:
+              '你是一个天气查询助手，你会根据用户的问题，比如问题里面的城市，去查询当天这个城市的天气情况，你会对结果进行语义话优化。',
+          },
           { role: 'user', content: message },
         ],
       }),
     };
 
     try {
-      const response = await fetch(
-        'https://api.openai-proxy.org/v1/chat/completions',
-        body,
-      );
+      const response = await fetch(`${process.env.OPENAI_API_URL}`, body);
 
       if (!response.ok) {
         throw new Error(`请求失败，状态码：${response.status}`);
       }
 
-      const data = await response.json();
+      const data = (await response.json()) as OpenAIResponse;
 
       return {
-        code: 200,
         data: {
           message: data.choices[0].message.content,
           id: data.id,
@@ -39,11 +54,9 @@ export class BasicBotService {
           usage: data.usage,
         },
       };
-    } catch (error) {
-      return {
-        code: 500,
-        error: error.message,
-      };
+    } catch (error: unknown) {
+      const err = error as Error;
+      throw new Error(err.message);
     }
   }
 }
