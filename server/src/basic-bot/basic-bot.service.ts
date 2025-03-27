@@ -38,10 +38,7 @@ export class BasicBotService {
     };
 
     try {
-      const response = await fetch(
-        'https://api.openai-proxy.org/v1/chat/completions',
-        body,
-      );
+      const response = await fetch(`${process.env.OPENAI_API_URL}`, body);
 
       if (!response.ok) {
         throw new Error(`请求失败，状态码：${response.status}`);
@@ -50,7 +47,6 @@ export class BasicBotService {
       const data = (await response.json()) as OpenAIResponse;
 
       return {
-        code: 200,
         data: {
           message: data.choices[0].message.content,
           id: data.id,
@@ -60,10 +56,7 @@ export class BasicBotService {
       };
     } catch (error: unknown) {
       const err = error as Error;
-      return {
-        code: 500,
-        error: err.message,
-      };
+      throw new Error(err.message);
     }
   }
 }

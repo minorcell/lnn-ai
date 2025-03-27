@@ -9,7 +9,6 @@ interface OllamaResponse {
   };
 }
 
-// 扩展Express Response类型以支持flush方法
 interface EnhancedResponse extends Response {
   flush?: () => void;
 }
@@ -26,8 +25,6 @@ export class LocalBotService {
       })) as OllamaResponse;
 
       return {
-        code: 200,
-        timestamp: new Date().toISOString(),
         data: {
           model: response.model,
           message: response.message.content,
@@ -35,14 +32,7 @@ export class LocalBotService {
       };
     } catch (error: unknown) {
       const err = error as Error;
-      return {
-        code: 500,
-        timestamp: new Date().toISOString(),
-        error: {
-          message: err.message || 'An unexpected error occurred',
-          stack: process.env.NODE_ENV === 'development' ? err.stack : undefined,
-        },
-      };
+      throw new Error(err.message || 'An unexpected error occurred');
     }
   }
 
