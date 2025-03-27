@@ -29,9 +29,21 @@ export class BasicBotService {
       }
 
       const data = await response.json();
-      return { message: data.choices[0].message.content };
+
+      return {
+        code: 200,
+        data: {
+          message: data.choices[0].message.content,
+          id: data.id,
+          model: data.model,
+          usage: data.usage,
+        },
+      };
     } catch (error) {
-      return { error: error.message };
+      return {
+        code: 500,
+        error: error.message,
+      };
     }
   }
 }
