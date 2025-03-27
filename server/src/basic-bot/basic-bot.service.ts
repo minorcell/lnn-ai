@@ -1,5 +1,20 @@
 import { Injectable } from '@nestjs/common';
 
+interface OpenAIResponse {
+  id: string;
+  model: string;
+  usage: {
+    prompt_tokens: number;
+    completion_tokens: number;
+    total_tokens: number;
+  };
+  choices: Array<{
+    message: {
+      content: string;
+    };
+  }>;
+}
+
 @Injectable()
 export class BasicBotService {
   async chat(message: string) {
@@ -12,7 +27,11 @@ export class BasicBotService {
       body: JSON.stringify({
         model: 'gpt-3.5-turbo',
         messages: [
-          { role: 'system', content: '你是一个天气查询助手，你会根据用户的问题，比如问题里面的城市，去查询当天这个城市的天气情况，你会对结果进行语义话优化。' },
+          {
+            role: 'system',
+            content:
+              '你是一个天气查询助手，你会根据用户的问题，比如问题里面的城市，去查询当天这个城市的天气情况，你会对结果进行语义话优化。',
+          },
           { role: 'user', content: message },
         ],
       }),
@@ -28,7 +47,7 @@ export class BasicBotService {
         throw new Error(`请求失败，状态码：${response.status}`);
       }
 
-      const data = await response.json();
+      const data = (await response.json()) as OpenAIResponse;
 
       return {
         code: 200,
@@ -39,10 +58,11 @@ export class BasicBotService {
           usage: data.usage,
         },
       };
-    } catch (error) {
+    } catch (error: unknown) {
+      const err = error as Error;
       return {
         code: 500,
-        error: error.message,
+        error: err.message,
       };
     }
   }

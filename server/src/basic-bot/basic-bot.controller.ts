@@ -6,7 +6,7 @@ export class BasicBotController {
   constructor(private readonly basicBotServer: BasicBotService) {}
 
   @Post('chat')
-  getHello(@Body() { message }) {
+  getHello(@Body() { message }: { message: string }) {
     return this.basicBotServer.chat(message);
   }
 }
