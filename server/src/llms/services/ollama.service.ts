@@ -1,21 +1,22 @@
 import { Injectable } from '@nestjs/common';
 import ollama from 'ollama';
-import { Response } from 'express';
-
-interface OllamaResponse {
-  model: string;
-  message: {
-    content: string;
-  };
-}
-
-interface EnhancedResponse extends Response {
-  flush?: () => void;
-}
+import {
+  EnhancedResponse,
+  LLMService,
+  OllamaResponse,
+} from '../interfaces/llm.interface';
 
 @Injectable()
-export class LocalBotService {
-  async chat(message: string) {
+export class OllamaService implements LLMService {
+  async chat(message: string, stream = false, response?: EnhancedResponse) {
+    if (stream && response) {
+      return this.chatStream(message, response);
+    }
+
+    return this.chatNormal(message);
+  }
+
+  private async chatNormal(message: string) {
     try {
       const prompt = { role: 'user', content: message };
       const response = (await ollama.chat({
@@ -36,7 +37,7 @@ export class LocalBotService {
     }
   }
 
-  async chatStream(message: string, response: EnhancedResponse) {
+  private async chatStream(message: string, response: EnhancedResponse) {
     try {
       response.setHeader('Content-Type', 'text/event-stream');
       response.setHeader('Cache-Control', 'no-cache');
