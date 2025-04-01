@@ -20,7 +20,7 @@ export class OllamaService implements LLMService {
     try {
       const prompt = { role: 'user', content: message };
       const response = (await ollama.chat({
-        model: 'qwen2.5:14b',
+        model: 'llama3.1:8b',
         messages: [prompt],
         stream: false,
       })) as OllamaResponse;
@@ -45,7 +45,7 @@ export class OllamaService implements LLMService {
 
       const prompt = { role: 'user', content: message };
       const stream = await ollama.chat({
-        model: 'qwen2.5:14b',
+        model: 'llama3.1:8b',
         messages: [prompt],
         stream: true,
       });

@@ -1,6 +1,7 @@
 import { Body, Controller, Post, Res } from '@nestjs/common';
 import { OpenAIService } from './services/openai.service';
 import { OllamaService } from './services/ollama.service';
+import { LLNService } from './services/lln.service';
 import { ChatRequestDto, ModelType } from './dto/chat.dto';
 import { EnhancedResponse } from './interfaces/llm.interface';
 
@@ -9,6 +10,7 @@ export class LLMsController {
   constructor(
     private readonly openaiService: OpenAIService,
     private readonly ollamaService: OllamaService,
+    private readonly llnService: LLNService,
   ) {}
 
   @Post('chat')
@@ -30,8 +32,6 @@ export class LLMsController {
 
       // 确保stream是布尔值
       const stream = Boolean(chatRequest.stream);
-
-      console.log('处理后的参数:', { message, modelType, stream }); // 调试日志
 
       // 根据modelType选择服务
       const service =
@@ -57,5 +57,13 @@ export class LLMsController {
         },
       });
     }
+  }
+
+  @Post('lln-chat')
+  async llnChat(
+    @Body() { message, stream }: { message: string; stream: boolean },
+    @Res() response: EnhancedResponse,
+  ) {
+    return await this.llnService.chat(message, stream, response);
   }
 }
