@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- 背景圆形 -->
+  <circle cx="100" cy="100" r="95" fill="#6366f1" />
+  <!-- 脸部 -->
+  <circle cx="100" cy="100" r="80" fill="#f9fafb" />
+  <!-- 眼睛 -->
+  <ellipse cx="70" cy="85" rx="12" ry="15" fill="#1e293b" />
+  <ellipse cx="130" cy="85" rx="12" ry="15" fill="#1e293b" />
+  <!-- 眼睛高光 -->
+  <circle cx="74" cy="80" r="4" fill="white" />
+  <circle cx="134" cy="80" r="4" fill="white" />
+  <!-- 腮红 -->
+  <circle cx="65" cy="110" r="10" fill="#fecaca" opacity="0.6" />
+  <circle cx="135" cy="110" r="10" fill="#fecaca" opacity="0.6" />
+  <!-- 嘴巴 (微笑) -->
+  <path d="M75,120 Q100,145 125,120" stroke="#1e293b" stroke-width="4" fill="none" />
+  <!-- 数字元素 -->
+  <circle cx="160" cy="40" r="15" fill="#ef4444" />
+  <text x="160" y="45" font-family="Arial" font-size="16" fill="white" text-anchor="middle">18</text>
+  <!-- 装饰元素 -->
+  <path d="M30,50 Q40,30 50,50" stroke="#6366f1" stroke-width="3" fill="none" />
+  <path d="M150,50 Q160,30 170,50" stroke="#6366f1" stroke-width="3" fill="none" />
+</svg>
