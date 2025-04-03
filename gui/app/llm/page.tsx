@@ -84,10 +84,6 @@ export default function LLMChat() {
 
   return (
     <div className="flex flex-col h-screen bg-background">
-      <header className="p-4 border-b border-gray-200 dark:border-gray-800 bg-gradient-to-r from-blue-500 to-purple-600">
-        <h1 className="text-xl font-bold text-white">AI Chat</h1>
-      </header>
-
       <main className="flex-1 overflow-auto p-4 flex justify-center">
         <div className="w-3/5 space-y-4">
           {messages.map((message, index) => (
@@ -143,7 +139,7 @@ export default function LLMChat() {
           </motion.button>
           <motion.button
             onClick={handleSend}
-            className="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg"
+            className="px-4 py-2 bg-blue-500 text-white rounded-lg"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             transition={{ type: 'spring', stiffness: 400, damping: 10 }}
